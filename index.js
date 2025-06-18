@@ -34,16 +34,15 @@ const getUniqueAuthors = function (recipes) {
   const authorCounterList = Object.entries(authorCounteringObject);
   const authorUniqueListCounter = authorCounterList.filter(
     (list) => list[1] === 1
-  ); 
+  );
 
   const authorUniqueList = authorUniqueListCounter.map((author) => author[0]);
 
   // console.log(authorUniqueList);
-  return authorUniqueList; 
+  return authorUniqueList;
 };
 
 console.log(getUniqueAuthors(cakeRecipes));
-
 
 // 2 Create a function that logs the name of each recipe. As input, it takes in a list of recipes with the same format as cakeRecipes. Use object destructuring in this function. If there are no recipes found in the input, then log that there are no recipes found.
 const getRecipeName = function (recipes) {
@@ -66,18 +65,19 @@ const getRecipeName = function (recipes) {
 // console.log(getRecipeName(cakeRecipes).length)
 // getRecipeName(cakeRecipes);
 
-
-// 3 
+// 3
 const getRecipesByAuthor = function (recipes, author) {
   if (!Array.isArray(recipes) || typeof author !== "string") return [];
 
-  const filteredRecipe = recipes.filter((recipe) => recipe.Author.toLowerCase() === author.toLowerCase());
+  const filteredRecipe = recipes.filter(
+    (recipe) => recipe.Author.toLowerCase() === author.toLowerCase()
+  );
   return filteredRecipe;
 };
 
 // console.log(getRecipesByAuthor(cakeRecipes, "Mary Cadogan"));
 // console.log(getRecipesByAuthor(cakeRecipes, "Mary Cadogan").length);
-getRecipeName(getRecipesByAuthor(cakeRecipes, "Mary Cadogan")) // Mary has 5 recipes
+getRecipeName(getRecipesByAuthor(cakeRecipes, "Mary Cadogan")); // Mary has 5 recipes
 
 // 4
 const getRecipeaByIngredient = function (recipes, ingredient) {
@@ -85,7 +85,9 @@ const getRecipeaByIngredient = function (recipes, ingredient) {
   const recipesWithIngredient = recipes.filter(
     (recipe) =>
       Array.isArray(recipe["Ingredients"]) &&
-      recipe["Ingredients"].some((ing) => ing.toLowerCase() === ingredient.toLowerCase())
+      recipe["Ingredients"].some(
+        (ing) => ing.toLowerCase() === ingredient.toLowerCase()
+      )
   );
   return recipesWithIngredient;
 };
@@ -100,10 +102,19 @@ const getRecipeByName = function (recipes, name) {
   const lowerName = name.toLowerCase();
   const recipe = recipes.find(
     (recipe) =>
-      recipe && typeof recipe.Name === "string" && recipe.Name.toLowerCase().includes(lowerName)
+      recipe &&
+      typeof recipe.Name === "string" &&
+      recipe.Name.toLowerCase().includes(lowerName)
   );
-  console.log(recipe);
-  return [recipe] || null;
+
+  if (recipe === undefined) {
+    console.log("\n sorry we didn't find any recipe with that name.");
+    return null;
+  } else {
+    console.log(recipe);
+  }
+
+  return recipe ? [recipe] : null
 };
 
 getRecipeByName(cakeRecipes, "Snow-capped Fairy cakes");
@@ -114,9 +125,9 @@ const getIngredients = function (recipes) {
   const ingredients = [];
   recipes.forEach((recipe) => {
     if (Array.isArray(recipe["Ingredients"])) {
-    ingredients.push(recipe["Ingredients"]);
-  }
-});
+      ingredients.push(recipe["Ingredients"]);
+    }
+  });
 
   const flattenedIngredients = ingredients.reduce((accumulator, currentValue) =>
     accumulator.concat(currentValue)
@@ -124,7 +135,7 @@ const getIngredients = function (recipes) {
 
   console.log(flattenedIngredients);
   return flattenedIngredients;
-}; 
+};
 
 getIngredients(getRecipesByAuthor(cakeRecipes, "Mary Cadogan"));
 
@@ -159,14 +170,21 @@ do {
       break;
     case 3:
       const ingredientInput = prompt("Enter the ingredient please: ");
-      const recipesByIngredient = getRecipeaByIngredient(cakeRecipes, ingredientInput);
+      const recipesByIngredient = getRecipeaByIngredient(
+        cakeRecipes,
+        ingredientInput
+      );
       getRecipeName(recipesByIngredient);
       break;
     case 4:
-      const nameInput = prompt("Enter the name of the recipe you're looking for please: ");
+      const nameInput = prompt(
+        "Enter the name of the recipe you're looking for please: "
+      );
       const recipe = getRecipeByName(cakeRecipes, nameInput);
+      if (!recipe) break;
       const option = prompt("Do you want to save the ingredients?: Y or N: ");
-      if (option.toUpperCase() === "Y") ingredientsSaved.push(...getIngredients(recipe));
+      if (option.toUpperCase() === "Y")
+        ingredientsSaved.push(...getIngredients(recipe));
       break;
     case 5:
       console.log(ingredientsSaved);
